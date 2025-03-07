@@ -1,7 +1,8 @@
 package edu.examen.marzo2025.persistencia;
 
 import java.util.List;
-
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
@@ -12,16 +13,17 @@ import edu.examen.marzo2025.util.HibernateUtil;
 
 public class ExamenesDAOImpl implements ExamenesDAO {
 
-	//private static final Logger Logger = LogManager.getLogger(ExamenesDAOImpl.class);
+	private static final Logger Logger = LogManager.getLogger(ExamenesDAOImpl.class);
 	
 
     @Override
     public List<Examen> recuperarExamenes() {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+        	Logger.info("Exámenes recuperados con éxito.");
             return session.createQuery("FROM Examen", Examen.class).list();
         } catch (Exception e) {
             e.printStackTrace();
-          //  Logger.error("Error al recuperar exámenes", e);
+            Logger.error("Error al obtener exámenes");
             return null;
         }
     }
@@ -29,9 +31,11 @@ public class ExamenesDAOImpl implements ExamenesDAO {
     @Override
     public List<Pregunta> recuperarPreguntas() {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+        	Logger.info("Preguntas recuperados con éxito.");
             return session.createQuery("FROM Pregunta", Pregunta.class).list();
         } catch (Exception e) {
             e.printStackTrace();
+            Logger.error("Error al obtener preguntas");
             return null;
         }
     }
@@ -44,8 +48,10 @@ public class ExamenesDAOImpl implements ExamenesDAO {
                 Long.class)
                 .setParameter("idExamen", idExamen)
                 .uniqueResult();
+            Logger.info("Se han recuperado el numero de preguntascon éxito. Un total de: "+count);
             return count != null ? count.intValue() : 0;
         } catch (Exception e) {
+        	Logger.error("Error al obtener las preguntas del examen");
             e.printStackTrace();
             return null;
         }
@@ -58,8 +64,10 @@ public class ExamenesDAOImpl implements ExamenesDAO {
             tx = session.beginTransaction();
             session.persist(pregunta);
             tx.commit();
+            Logger.info("Se ha añadido una pregunta con éxito.");
             return true;
         } catch (Exception e) {
+        	Logger.error("Error al añadir una pregunta");
             if (tx != null) tx.rollback();
             e.printStackTrace();
             return false;
@@ -73,8 +81,10 @@ public class ExamenesDAOImpl implements ExamenesDAO {
             tx = session.beginTransaction();
             session.persist(examen);
             tx.commit();
+            Logger.info("Se ha añadido un examen con éxito.");
             return true;
         } catch (Exception e) {
+        	Logger.error("Error al añadir una examen");
             if (tx != null) tx.rollback();
             e.printStackTrace();
             return false;
@@ -107,9 +117,10 @@ public class ExamenesDAOImpl implements ExamenesDAO {
             session.persist(pde);
 
             tx.commit();
-           // Logger.info("Pregunta añadida al examen con éxito");
+            Logger.info("Se ha añadido una pregunta a un examen con éxito.");
             return true;
         } catch (Exception e) {
+        	Logger.error("Error al añadir una pregunta a un examen");
             if (tx != null) tx.rollback();
             e.printStackTrace();
             return false;
@@ -130,15 +141,16 @@ public class ExamenesDAOImpl implements ExamenesDAO {
                     .uniqueResult();
 
                 if (pde == null) {
-                   // Logger warn
+                	Logger.warn("No se encontró alguno de los datos");
                     return false;
                 }
 
                 session.remove(pde);
                 tx.commit();
-               // Logger
+                Logger.info("Se ha quitado una pregunta a un examen con éxito.");
                 return true;
         } catch (Exception e) {
+        	Logger.error("Error al quitar una pregunta a un examen");
             if (tx != null) tx.rollback();
             e.printStackTrace();
             return false;
@@ -157,8 +169,10 @@ public class ExamenesDAOImpl implements ExamenesDAO {
                 return true;
             }
             if (tx != null) tx.rollback();
+            Logger.info("Se ha eliminado una pregunta con éxito.");
             return false;
         } catch (Exception e) {
+        	Logger.error("Error al eliminar una pregunta");
             if (tx != null) tx.rollback();
             e.printStackTrace();
             return false;
@@ -177,8 +191,10 @@ public class ExamenesDAOImpl implements ExamenesDAO {
                 return true;
             }
             if (tx != null) tx.rollback();
+            Logger.info("Se ha quitado un examen con éxito.");
             return false;
         } catch (Exception e) {
+        	Logger.error("Error al eliminar un examen");
             if (tx != null) tx.rollback();
             e.printStackTrace();
             return false;
