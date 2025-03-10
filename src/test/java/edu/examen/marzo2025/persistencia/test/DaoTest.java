@@ -25,7 +25,7 @@ public class DaoTest {
 
 	@Test
 	public void testRecuperarExamenes() {
-		List<Examen> resultado = examenesDAO.recuperarExamenes();
+		List<Examen> resultado = recuperarExamenes();
 		assertTrue(resultado.isEmpty());
 	}
 

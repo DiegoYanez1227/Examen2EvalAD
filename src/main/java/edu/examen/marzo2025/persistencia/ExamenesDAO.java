@@ -24,7 +24,7 @@ public interface ExamenesDAO {
 	 * @param idExamen
 	 * @return
 	 */
-	Integer numeroPreguntasDelExamen(int idExamen);
+	int numeroPreguntasDelExamen(int idExamen);
 	
 	/**
 	 * Almacena (persiste) una pregunta

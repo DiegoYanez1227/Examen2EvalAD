@@ -41,21 +41,19 @@ public class ExamenesDAOImpl implements ExamenesDAO {
     }
 
     @Override
-    public Integer numeroPreguntasDelExamen(int idExamen) {
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            Long count = session.createQuery(
-                "SELECT COUNT(p.id.pregunta) FROM PreguntaDeExamen p WHERE p.id.examen = :idExamen",
-                Long.class)
-                .setParameter("idExamen", idExamen)
-                .uniqueResult();
+    public int numeroPreguntasDelExamen(int idExamen) {
+        try (Session se = HibernateUtil.getSessionFactory().openSession()) {
+            Long count = se.createQuery("SELECT COUNT(p) FROM PreguntaDeExamen p WHERE p.examen.id = :idP", Long.class)
+                           .setParameter("idP", idExamen)
+                           .uniqueResult();
             Logger.info("Se han recuperado el numero de preguntascon éxito. Un total de: "+count);
             return count != null ? count.intValue() : 0;
         } catch (Exception e) {
         	Logger.error("Error al obtener las preguntas del examen");
-            e.printStackTrace();
-            return null;
         }
+        return 0;
     }
+    
 
     @Override
     public boolean aniadirPregunta(Pregunta pregunta) {
