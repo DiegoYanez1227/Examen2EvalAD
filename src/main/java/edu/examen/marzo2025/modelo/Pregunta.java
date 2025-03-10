@@ -2,6 +2,8 @@ package edu.examen.marzo2025.modelo;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -20,6 +22,7 @@ public class Pregunta {
     @Column(name = "respuesta_correcta", nullable = true)
     private Integer respuestaCorrecta;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "pregunta", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PreguntaDeExamen> preguntasDeExamen;
 
